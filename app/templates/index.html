@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API ma’lumot</title>
+</head>
+<body>
+    <h1>API Ma’lumot Konsolda</h1>
+    <script>
+        fetch("http://127.0.0.1:8000/api/foods/")
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.log("Xato:", error));
+    </script>
+</body>
+</html>
