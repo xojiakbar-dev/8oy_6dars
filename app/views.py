@@ -4,36 +4,40 @@ from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPI
 from rest_framework import permissions
 from rest_framework.permissions import SAFE_METHODS
 from .my_permissions import CategoryPermission,FoodPermission,CommentPermission
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.throttling import AnonRateThrottle
 
-class CategoryView(ListCreateAPIView):
+class CategoryAnonThrottle(AnonRateThrottle):
+    scope = "category_list"
+
+class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    lookup_url_kwarg = "category_id"
+    lookup_field = "pk"
+    throttle_classes = [CategoryAnonThrottle]
 
-    permission_classes = [permissions.IsAuthenticated , CategoryPermission]
+    # permission_classes = [permissions.IsAuthenticated , CategoryPermission]
 
-class CategoryDetailView(RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
 
-    permission_classes = [permissions.IsAuthenticated]
+class FoodAnonThrottle(AnonRateThrottle):
+    scope = "foods_list"
 
-class FoodApiView(ListCreateAPIView):
+class FoodViewSet(ModelViewSet):
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
-
-class FoodDetailView(RetrieveUpdateDestroyAPIView):
-    queryset = Food.objects.all()
-    serializer_class = FoodSerializer
-
-    permission_classes = [permissions.IsAuthenticated , FoodPermission]
+    lookup_url_kwarg = "food_id"
+    lookup_field = "pk"
+    throttle_classes = [FoodAnonThrottle]
 
 
-class CommentsView(ListCreateAPIView):
+class CommentAnonThrottle(AnonRateThrottle):
+    scope = "comments_list"
+
+class CommentsViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    lookup_url_kwarg = "comment_id"
+    lookup_field = "pk"
+    throttle_classes = [CommentAnonThrottle]
 
-class CommentDetailView(RetrieveUpdateDestroyAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-
-    permission_classes = [permissions.IsAuthenticated , CommentPermission]
